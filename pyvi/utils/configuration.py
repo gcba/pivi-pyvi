@@ -88,3 +88,8 @@ class Configuration(object):
         as_list = gcba_id.split(',')
         ids = [1, 2, 3, 4, 5, 6]
         return dict(zip(ids, as_list))
+
+    def gcba_transport(self):
+        items = dict(self.config.items('GCBA'))
+        items['gcba_id'] = self.gcba_id()
+        return items
