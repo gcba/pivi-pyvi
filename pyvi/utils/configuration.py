@@ -58,3 +58,33 @@ class Configuration(object):
     def log_mail(self):
         mail = self.config.get('logs', 'mail').lower()
         return mail
+
+    def gcba_server(self):
+        server = self.config.get('GCBA', 'server').lower()
+        return server
+
+    def gcba_type_Irms(self):
+        msg_type = self.config.get('GCBA', 'type_irms').lower()
+        return msg_type
+
+    def gcba_type_Vrms(self):
+        msg_type = self.config.get('GCBA', 'type_vrms').lower()
+        return msg_type
+
+    def gcba_type_Power(self):
+        msg_type = self.config.get('GCBA', 'type_power').lower()
+        return msg_type
+
+    def gcba_username(self):
+        username = self.config.get('GCBA', 'username')
+        return username
+
+    def gcba_password(self):
+        password = self.config.get('GCBA', 'password')
+        return password
+
+    def gcba_id(self):
+        gcba_id = self.config.get('GCBA', 'gcba_id')
+        as_list = gcba_id.split(',')
+        ids = [1, 2, 3, 4, 5, 6]
+        return dict(zip(ids, as_list))
