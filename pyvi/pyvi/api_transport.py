@@ -56,8 +56,13 @@ class ApiTransport(Transport):
         return result
 
     def write(self, value):
+
+        gcba_id = self.ids_sensor[value.id_]
+
+        if not gcba_id:
+            return "sensor not config in api_backend"
         try:
-            encode_args = self._encode(self.ids_sensor[value.id_], value.Vrms, value.Irms, value.Power)
+            encode_args = self._encode(gcba_id, value.Vrms, value.Irms, value.Power)
             auth_basic = self._base64()
             result = self._post(encode_args, auth_basic)
         except:
