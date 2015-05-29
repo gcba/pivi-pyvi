@@ -14,7 +14,9 @@ import time
 from pyvi import SerialTransport
 from pyvi import TestTransport
 from pyvi import UdpTransport
+from pyvi import ApiTransport
 from pyvi import ThreadSerial
+from pyvi import ThreadApi
 from pyvi import ThreadUdp
 
 from utils import Configuration
@@ -25,8 +27,10 @@ def sig_handler(signum, frame):
     pyvi_logger.info('Signal handler stopping the program')
     serial.kill()
     udp.kill()
+    api.kill()
     serial.join()
     udp.join()
+    api.join()
     sys.exit(0)
 
 if len(sys.argv) == 2:
@@ -47,24 +51,29 @@ try:
     pivi_id = int(conf.pivi_id())
     udp_transport = UdpTransport()
     udp_transport.open(conf.server_uri())
+    api_transport = ApiTransport()
+    api_transport.open(conf.gcba_transport())
 except:
     pyvi_logger.exception("Exception while creating the transports.")
     raise
 
-measurements = Queue.Queue(maxsize=100)
-
-serial = ThreadSerial(conf_file, serial_transport, measurements)
+udp_queue = Queue.Queue(maxsize=100)
+api_queue = Queue.Queue(maxsize=100)
+queues = {'udp': udp_queue, 'api': api_queue}
+serial = ThreadSerial(conf_file, serial_transport, queues)
 serial.daemon = True
-udp = ThreadUdp(conf_file, udp_transport, pivi_id, measurements)
+udp = ThreadUdp(conf_file, udp_transport, pivi_id, udp_queue)
 udp.daemon = True
+api = ThreadApi(conf_file, api_transport, api_queue)
+api.daemon = True
 
 signal.signal(signal.SIGINT, sig_handler)
 signal.signal(signal.SIGTERM, sig_handler)
 
 pyvi_logger.info('Pyvi threads about to start.')
 serial.start()
-
 udp.start()
+api.start()
 
 while (True):
     time.sleep(10)
