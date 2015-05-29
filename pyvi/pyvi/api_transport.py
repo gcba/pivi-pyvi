@@ -59,7 +59,7 @@ class ApiTransport(Transport):
 
         gcba_id = self.ids_sensor[value.id_]
 
-        if not gcba_id:
+        if gcba_id == 0 or gcba_id == '0':
             return "sensor not config in api_backend"
         try:
             encode_args = self._encode(gcba_id, value.Vrms, value.Irms, value.Power)

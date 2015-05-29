@@ -136,7 +136,8 @@ def copy_configs():
 
 def replace_config():
     kw = {'PIVI_ID': PIVI_ID, 'VIRTUAL': VIRTUAL,
-          'SERVER_IP': SERVER_IP}
+          'SERVER_IP': SERVER_IP, 'GCBA_ID':ids[int(PIVI_ID)]}
+    kw.update(config_deploy)
     f = open('pivi.cfg.in', 'r')
     template = Template(f.read())
     replaced = template.safe_substitute(kw)

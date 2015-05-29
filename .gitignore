@@ -16,3 +16,5 @@ build/
 
 setup/bootstrap/image/
 pivi.cfg
+.idea
+dictdeploy.py
