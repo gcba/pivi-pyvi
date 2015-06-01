@@ -3,12 +3,17 @@ from string import Template
 from fabric.operations import sudo, run, put, reboot
 from fabric.api import task, cd, env, settings
 
+try:
+    from dictdeploy import ids, config_deploy
+except:
+    raise "missing deployment configuration"
+
 DEBS_MAIN = 'git python-serial python-pip lighttpd supervisor fabric'
 
 PIP_MODS = ['flup', 'web.py']
 
-GIT_ROOT = 'https://github.com/LESSIoT/'
-
+# GIT_ROOT = 'https://github.com/LESSIoT/'
+GIT_ROOT = 'ssh://ignacio@10.92.30.133/home/ignacio/projects/'
 # Sudo password
 env.password = 'raspberry'
 
@@ -115,9 +120,9 @@ def install():
     It assumes that the filesystem is already expanded.
     """
     # Install deb packages in main
-    debian_main()
+    # debian_main()
     # Install packages from pip
-    pip_all()
+    # pip_all()
     # Clone and install pimaker software
     install_pivi()
 
@@ -148,7 +153,7 @@ def replace_config():
 
 
 def install_pivi():
-    git_get('pivi-pyvi', 'src')
+    git_get('pivi-gcba', 'src')
     sudo('cd /home/pi/src/pyvi/; python setup.py install')
     sudo('cd /home/pi/src/webserver/; chown -R www-data:www-data *')
     sudo('update-rc.d lighttpd defaults')
@@ -185,7 +190,8 @@ def git_get(name, dest=None):
     """
     if dest is None:
         dest = name
-    url = GIT_ROOT + name + '.git'
+    # url = GIT_ROOT + name + '.git'
+    url = GIT_ROOT + name
     code_dir = '/home/pi/' + dest
     # On the first run it will clone and then fetch.
     # the fetch step is not needed right after cloning
