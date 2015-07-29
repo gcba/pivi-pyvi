@@ -32,13 +32,15 @@ class ApiTransport(Transport):
 
     def _encode(self, sensor, data1, data2, data3):
         query_args = urllib.urlencode({
-            "id": sensor,
+            "id1": sensor,
             "datatype1": self.datatype1,
             "data1": str(data1),
+            "id2": sensor,
             "datatype2": self.datatype2,
             "data2": str(data2),
+            "id3": sensor,
             "datatype3": self.datatype3,
-            "data3": str(data3),
+            "data3": str(data3)
         })
         return query_args
 
