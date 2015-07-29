@@ -15,7 +15,7 @@ PIP_MODS = ['flup', 'web.py']
 # GIT_ROOT = 'https://github.com/LESSIoT/'
 GIT_ROOT = 'ssh://ignacio@10.92.26.188/home/ignacio/projects/'
 # Sudo password
-env.password = 'raspberry'
+env.password = '9SCRQPK@wesQ?HC'
 
 PIVI_ID = "0"
 VIRTUAL = "False"
