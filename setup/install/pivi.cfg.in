@@ -19,8 +19,7 @@ port = 9000
 
 [GCBA]
 server = ${SERVER_API}
-username: ${USERNAME}
-password: ${PASSWORD}
+token: ${TOKEN}
 type_irms = irms
 type_vrms = vrms
 type_power = power

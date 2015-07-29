@@ -7,7 +7,7 @@
 from transport import Transport
 import urllib
 import urllib2
-import base64
+
 
 class ApiTransport(Transport):
     """
@@ -19,14 +19,12 @@ class ApiTransport(Transport):
         self.sock = None
         self.srv_addr = None
         self.api_name = None
-        self.username = None
-        self.password = None
+        self.token = None
         self.ids_sensor = {}
 
     def _open(self):
         self.api_name = self.settings['server']
-        self.username = self.settings['username']
-        self.password = self.settings['password']
+        self.token = self.settings['token']
         self.datatype1 = self.settings['type_vrms']
         self.datatype2 = self.settings['type_irms']
         self.datatype3 = self.settings['type_power']
@@ -34,24 +32,20 @@ class ApiTransport(Transport):
 
     def _encode(self, sensor, data1, data2, data3):
         query_args = urllib.urlencode({
-                "id": sensor,
-                "datatype1" : self.datatype1,
-                "data1": str(data1),
-                "datatype2" : self.datatype2,
-                "data2": str(data2),
-                "datatype3" : self.datatype3,
-                "data3": str(data3),
-            })
+            "id": sensor,
+            "datatype1": self.datatype1,
+            "data1": str(data1),
+            "datatype2": self.datatype2,
+            "data2": str(data2),
+            "datatype3": self.datatype3,
+            "data3": str(data3),
+        })
         return query_args
 
-    def _base64(self):
-        base64string = base64.encodestring('%s:%s' % (self.username, self.password)).replace('\n', '')
-        return base64string
-
-    def _post(self, args, base64string):
+    def _post(self, args):
         request = urllib2.Request(self.api_name)
         request.add_data(args)
-        request.add_header("Authorization", "Basic %s" % base64string)
+        request.add_header("token", self.token)
         result = urllib2.urlopen(request).read()
         return result
 
@@ -63,8 +57,7 @@ class ApiTransport(Transport):
             return "sensor not config in api_backend"
         try:
             encode_args = self._encode(gcba_id, value.Vrms, value.Irms, value.Power)
-            auth_basic = self._base64()
-            result = self._post(encode_args, auth_basic)
+            result = self._post(encode_args)
         except:
             raise
             return False
