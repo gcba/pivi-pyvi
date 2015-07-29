@@ -13,7 +13,7 @@ DEBS_MAIN = 'git python-serial python-pip lighttpd supervisor fabric'
 PIP_MODS = ['flup', 'web.py']
 
 # GIT_ROOT = 'https://github.com/LESSIoT/'
-GIT_ROOT = 'ssh://user@host/project_path'
+GIT_ROOT = 'ssh://ignacio@10.92.26.188/home/ignacio/projects/'
 # Sudo password
 env.password = 'raspberry'
 
